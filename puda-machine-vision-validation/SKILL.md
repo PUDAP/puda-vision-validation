@@ -42,7 +42,7 @@ Before inspection, build or load a profile containing:
 | `machine_id` | Exact PUDA machine identifier in that environment; profile identity is `(environment, machine_id)` |
 | `image_source` | Environment-scoped passive stream/snapshot or approved capture command; never reuse another site's endpoint |
 | `camera_pose` | Named/fixed pose and calibration validity, when applicable |
-| `workspace_model` | Slots, zones, trays, fixtures, stages, pans, channels, or free-space regions |
+| `workspace_model` | Full machine/deck boundary plus every visible addressable slot, zone, tray, fixture, stage, pan, channel, or free-space region that must receive an annotation box |
 | `expected_objects` | Required object, identity/category, role, and expected region |
 | `required_states` | Open/closed, occupied/empty, attached/detached, aligned, connected, etc. |
 | `coordinate_model` | Optional named positions and their authoritative definition |
@@ -120,18 +120,28 @@ Record:
 
 Never expose camera credentials or secret connection strings in reports or committed files.
 
-## Region and Perspective Alignment
+## Required Machine-Deck Box Annotation
 
-Annotate according to the machine's physical workspace geometry:
+Follow the full-deck presentation discipline in `puda-opentrons-vision-validation`, generalized to the selected machine's own workspace model. For every validation where deck/workspace boundaries can be resolved, return an annotated copy of the fresh image with a closed visible box around **every machine deck region in view**—not only the regions named by the protocol.
 
-1. Identify visible physical boundary intersections from the fresh image.
-2. Build shared nodes/edges for adjacent regions; do not estimate every region independently.
-3. Use perspective-aware polygons or a calibrated homography when the camera is tilted.
-4. Cover each complete physical region from boundary to boundary without entering a neighbour.
-5. Anchor boundaries to the machine/workspace outline, not to an object's footprint.
-6. Preserve an unannotated evidence image and independently verify the final overlay.
+Here, “rectangle box” means a four-edge region outline. Use an axis-aligned rectangle only when the camera view and physical geometry support it. For a tilted camera, draw a perspective-aligned quadrilateral so the box follows the real deck boundaries instead of cutting across neighbouring regions.
 
-For irregular workspaces, use named polygons or keep-out zones rather than forcing rectangles. If a boundary is occluded or cannot be calibrated, mark the affected region `not visible` or `obstructed`.
+Annotation rules:
+
+1. Draw the full visible machine/deck outer boundary first.
+2. Identify shared physical boundary intersections for all slots, zones, trays, stages, pans, channels, fixtures, or other addressable deck regions.
+3. Build one shared lattice or boundary graph. Adjacent region boxes must reuse the same corner nodes and edges; do not estimate each box independently.
+4. Draw one complete closed box for every visible deck region, covering the whole physical region from boundary to boundary without entering a neighbour.
+5. Anchor boxes to the machine/deck structure, not to the footprint of the object currently occupying the region.
+6. Label every box with the machine-native region name or identifier and its observed state.
+7. Use **green** for `EMPTY`, **red** for `OCCUPIED`, **orange** for `OBSTRUCTED`, and **grey** for `NOT VISIBLE` when a region's expected location is known but cannot be inspected.
+8. Include an on-image legend using the same colours. Keep the underlying scene visible with transparent fills or outline-only boxes.
+9. Preserve the original unannotated evidence image separately from the annotated copy.
+10. Independently inspect the final overlay. Reject and redraw it if a box clips its own region, crosses into a neighbour, follows an object's edge instead of the deck, omits a visible region, or obscures evidence needed for identity/occupancy checks.
+
+For irregular workspaces, use a named polygon with the minimum vertices needed to follow the physical boundary rather than forcing an inaccurate four-corner box. If a boundary is occluded or cannot be calibrated, draw the known portion conservatively, label the region `NOT VISIBLE` or `OBSTRUCTED`, and keep the execution gate closed.
+
+Completion criterion: the annotated image contains the machine/deck outer boundary, one correctly aligned and labelled box for every visible workspace region, a legend, and no missing, overlapping, or neighbour-crossing regions; the clean original remains available as evidence.
 
 ## Addressable Positions and Occupancy
 
@@ -166,7 +176,9 @@ Completion criterion: a fresh non-empty image exists with provenance, time, and 
 
 For each expected region/object/state, report visibility, occupancy/state, observed category or identity, confidence, and supporting visual cue. Compare exact identity with official references when geometry affects safe operation.
 
-Completion criterion: all expected regions plus unexpected occupied/obstructed/keep-out regions are covered.
+Create the required machine-deck box annotation after classifying the clean image. Do not let labels or overlays substitute for inspection of the original pixels.
+
+Completion criterion: all expected regions plus unexpected occupied/obstructed/keep-out regions are covered, and every visible machine deck/workspace region has a verified closed annotation box.
 
 ### 4. Compare expected versus observed
 
@@ -192,12 +204,13 @@ Use:
 Report:
 
 1. **Environment, machine, and evidence** — active PUDA environment, machine ID, camera/pose, capture time, path/hash.
-2. **Expected-vs-observed table** — region, expected, observed, confidence, status.
-3. **Unexpected observations** — occupied, obstructed, or unsafe regions.
-4. **Coordinate checks** — requested position and occupancy/state, without a grid overlay.
-5. **Non-visual prerequisites** — telemetry/calibration/interlocks that remain unverified.
-6. **Gate decision** — pass, blocked, or needs confirmation.
-7. **Execution statement** — explicitly state whether any machine command or motion occurred.
+2. **Annotated machine/deck image** — attach the verified overlay with the outer boundary, one box per visible deck/workspace region, labels, states, and legend; retain the clean evidence image separately.
+3. **Expected-vs-observed table** — region, expected, observed, confidence, status.
+4. **Region summary** — concise occupied, empty, obstructed, and not-visible region lists, including unexpected observations.
+5. **Coordinate checks** — requested position and occupancy/state, without a grid overlay.
+6. **Non-visual prerequisites** — telemetry/calibration/interlocks that remain unverified.
+7. **Gate decision** — pass, blocked, or needs confirmation.
+8. **Execution statement** — explicitly state whether any machine command or motion occurred.
 
 ## Common Pitfalls
 
@@ -205,6 +218,8 @@ Report:
 - Applying OT-2 slots, A1 orientation, or labware rules to another machine.
 - Moving an arm to improve the camera view during a validation-only request.
 - Treating a camera image as proof of calibration, tare, electrical continuity, or telemetry freshness.
+- Drawing boxes only around protocol-used regions instead of every visible machine deck/workspace region.
+- Using axis-aligned rectangles on a tilted view, causing boxes to cross neighbouring regions; use perspective-aligned quadrilaterals.
 - Drawing region boxes from object footprints instead of physical workspace outlines.
 - Drawing a full coordinate grid over positions rather than inspecting a clean crop.
 - Reusing old confirmations as evidence for a fresh scene.
@@ -220,7 +235,13 @@ Report:
 - [ ] Visual versus non-visual prerequisites separated.
 - [ ] Passive capture used, or motion/state-changing capture separately approved.
 - [ ] Fresh image path, time, size, hash, camera, and pose recorded.
-- [ ] Physical regions aligned using shared perspective-aware boundaries.
+- [ ] Full visible machine/deck outer boundary drawn on the annotated copy.
+- [ ] Every visible deck/workspace region has one complete closed rectangle or perspective-aligned box.
+- [ ] Physical regions aligned using shared perspective-aware boundaries and exact shared edges/corners.
+- [ ] Every box covers its complete physical region without clipping it or entering a neighbour.
+- [ ] Every box is labelled with the machine-native region identifier and observed state.
+- [ ] Annotation uses green `EMPTY`, red `OCCUPIED`, orange `OBSTRUCTED`, and grey `NOT VISIBLE`, with an on-image legend.
+- [ ] Annotated image independently rechecked; no visible region is omitted and no box follows an object's footprint.
 - [ ] Clean unannotated evidence retained.
 - [ ] No coordinate grid drawn over objects or positions.
 - [ ] Every requested position validated against its exact definition and assigned a status.
