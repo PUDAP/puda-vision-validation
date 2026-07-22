@@ -7,6 +7,7 @@ Reusable PUDA vision-validation skills for BEARS, IMRE, NTU, and future PUDA env
 | Skill | Purpose |
 |---|---|
 | `puda-opentrons-vision-validation` | Opentrons OT-2 adapter for deck semantics, labware identification, pipette mounts, trash, and requested tip/well positions. Camera calibration and current-scene evidence remain scoped to the active site. |
+| `puda-dobot-vision-validation` | IMRE/MOF Dobot M1Pro adapter. Uses a fresh passive IP-camera frame to check tube-rack, BioShake, centrifuge, CAP/QBot, gripper-approach, and transfer-corridor conditions before separately authorized robot motion. Includes clean and annotated same-pose reference assets plus capture/annotation scripts. |
 | `template` (`puda-machine-vision-validation-template`) | Copy-and-customize skill package for another user, environment, camera, or machine. Mirrors the Opentrons skill structure with a `SKILL.md`, annotated example under `assets/`, and machine-identification guidance under `references/`. |
 
 The template supports creation of environment- and machine-specific skills without transferring camera geometry, calibration, credentials, workspace polygons, or previous visual confirmations between sites.
