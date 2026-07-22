@@ -95,9 +95,9 @@ Completion criterion: every requested well/tip coordinate is valid for the exact
 
 Use this image as the preferred presentation example for a full-deck occupancy check:
 
-![Annotated OT-2 deck slots](assets/ot2-deck-slot-occupancy-example.jpg)
+![Annotated OT-2 deck slots](assets/OT2-deck-slot-validation-example.jpg)
 
-Asset path: `assets/ot2-deck-slot-occupancy-example.jpg`
+Asset path: `assets/OT2-deck-slot-validation-example.jpg`
 
 Presentation conventions shown in the example:
 
