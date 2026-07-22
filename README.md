@@ -11,6 +11,10 @@ Reusable PUDA vision-validation skills for BEARS, IMRE, NTU, and future PUDA env
 
 The generic skill supports `bears`, `imre`, `ntu`, and future environments through their corresponding `<environment>-machines` skills. It does not transfer camera geometry, calibration, credentials, workspace polygons, or previous visual confirmations between sites.
 
+## Reusable template
+
+Copy [`puda-machine-vision-validation/templates/machine-deck-vision-validation-template.md`](puda-machine-vision-validation/templates/machine-deck-vision-validation-template.md) to create a validation record for another user, environment, or machine. It follows the Opentrons full-deck presentation approach—outer deck boundary, one labelled box per visible region, occupancy colours, legend, clean evidence, expected-vs-observed comparison, and explicit gate decision—without assuming OT-2 slot geometry.
+
 ## Install
 
 Using PUDA:

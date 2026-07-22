@@ -11,6 +11,8 @@ Provide one environment- and machine-neutral visual safety gate for PUDA-connect
 
 This skill validates visible physical state. It does not replace protocol validation, machine telemetry, calibration, interlocks, homing requirements, or operator approval.
 
+For a reusable validation record, copy and complete [`templates/machine-deck-vision-validation-template.md`](templates/machine-deck-vision-validation-template.md). The template follows the Opentrons full-deck annotation discipline while keeping region names, geometry, camera data, and safety prerequisites machine- and environment-specific.
+
 ## When to Use
 
 Use this skill when a PUDA workflow depends on any visually checkable condition, including:
@@ -201,7 +203,7 @@ Use:
 
 ## Output Format
 
-Report:
+Report using [`templates/machine-deck-vision-validation-template.md`](templates/machine-deck-vision-validation-template.md), or produce an equivalent record containing:
 
 1. **Environment, machine, and evidence** — active PUDA environment, machine ID, camera/pose, capture time, path/hash.
 2. **Annotated machine/deck image** — attach the verified overlay with the outer boundary, one box per visible deck/workspace region, labels, states, and legend; retain the clean evidence image separately.
