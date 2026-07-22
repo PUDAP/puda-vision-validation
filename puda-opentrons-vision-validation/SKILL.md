@@ -236,11 +236,11 @@ Required pre-run check:
 
 - On the user's BEARS OT-2 setup, **slot 12 contains the standard Opentrons trash bin**. Treat it as an expected fixed deck item, not as an unexpected obstruction. Report it as `Opentrons trash bin (expected)` unless the image shows a materially different object or the bin interferes with another required item.
 
-## User-Confirmed BEARS Camera-Angle Labware Reference
+## OT-2 Top-Camera Labware Example
 
 The user explicitly confirmed the labware identities in the fresh BEARS OT-2 frame captured at `2026-07-22T00:29:13Z`. Preserve and use the unannotated image as an angle-specific visual comparison reference:
 
-- Asset: `assets/bears-ot2-user-confirmed-labware-reference-20260722.jpg`
+- Asset: `assets/OT2-top-camera-labware-example.jpg`
 - SHA-256: `f39ff22b512c29408cbdc3b4b32b52d0219dad8673bd47dd2a2e3e11855e19a6`
 - Slot 2: custom 20 mL glass vial
 - Slot 3: custom 20 mL glass vial
@@ -252,16 +252,6 @@ The user explicitly confirmed the labware identities in the fresh BEARS OT-2 fra
 For a later fresh image from the same fixed BEARS camera angle, compare visible object morphology against this reference: overall footprint, height/perspective profile, frame colour and geometry, well/tip opening size, opening spacing, and the distinctive vial silhouette. Use a reference identity only when the fresh object's visible structure matches with adequate confidence. Do not assume that a labware type remains in the same slot, and do not infer occupancy from this historical frame. If the camera angle, zoom, lighting, lids, occlusion, or object geometry prevents a reliable match, report `needs confirmation`.
 
 These labels are user-confirmed labware categories. Do not invent an exact API load name for the custom vial or Corning plate unless the current protocol, label, or official definition establishes it. Where applicable, `opentrons_96_tiprack_1000ul` and `opentrons_96_tiprack_300ul` are candidate standard API names, but verify against the current protocol/definition before execution.
-
-### User-confirmed slot-3 300 µL rack reference
-
-The user explicitly confirmed that slot 3 contains a **300 µL tiprack** in the fresh BEARS frame captured at `2026-07-22T01:23:19Z`:
-
-- Asset: `assets/bears-ot2-user-confirmed-slot3-300ul-reference-20260722.jpg`
-- SHA-256: `b89096ae176c2f25b0a631d2c0b2767894e223be12b2bbd9b094a4fd6aa93233`
-- Slot 3: 300 µL tiprack
-
-Use this only as same-camera morphology evidence for future fresh frames, never as proof that slot 3 remains occupied. A rack moved between back and front deck rows changes apparent opening size because of perspective and distance. Compare normalized structural ratios within the rack footprint (opening diameter relative to pitch/frame size), not raw pixel diameter; if that still conflicts with a current user identification or cannot distinguish capacities, defer to current-run confirmation and report uncertainty.
 
 ## Current-Run Evidence Policy
 
