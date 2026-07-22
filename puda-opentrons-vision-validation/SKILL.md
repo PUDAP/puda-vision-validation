@@ -269,7 +269,7 @@ The only standing setup convention is the standard Opentrons trash bin in slot 1
 ## Common Pitfalls
 
 - **Misclassifying the slot 12 trash bin.** On the user's BEARS OT-2 setup, the item in slot 12 is the expected Opentrons trash bin; do not label it `OBSTRUCTED` merely because it occupies the slot.
-- **Guessing labware from appearance.** Ask the user when exact labware identity is uncertain.
+- **Guessing labware from appearance or matching the expectation by default.** Classify observed morphology before comparing it with the requested setup. For tipracks, compare opening diameter relative to pitch and frame geometry; do not call a rack `1000 µL` merely because 1000 µL was expected. If 300 µL versus 1000 µL is not visually reliable, report `needs confirmation`—never `OK` or `Match`. A wrong exact rack identity can load incompatible geometry and must keep the execution gate closed.
 - **Blindly carrying earlier occupancy into a fresh validation.** Never assume that a prior slot assignment or occupied/empty state still holds. Re-detect occupancy from the fresh image. User-confirmed angle-specific references stored in this skill may support labware identity only through a visible morphology match.
 - **Discarding user-confirmed visual references.** Preserve explicit user-confirmed angle-specific reference images and labels in this skill. Use them for future same-angle comparison, while reporting `needs confirmation` whenever the fresh object does not match clearly.
 - **Forgetting back-row slots.** Slot 10 is above 7, slot 11 above 8, and slot 12 above 9.
