@@ -6,14 +6,25 @@ Reusable PUDA vision-validation skills for BEARS, IMRE, NTU, and future PUDA env
 
 | Skill | Purpose |
 |---|---|
-| `puda-machine-vision-validation` | Environment- and machine-neutral visual safety gate. Selects the active PUDA environment and machine profile, captures fresh evidence, validates machine-native regions/objects/states, and blocks uncertain or mismatched physical execution. |
 | `puda-opentrons-vision-validation` | Opentrons OT-2 adapter for deck semantics, labware identification, pipette mounts, trash, and requested tip/well positions. Camera calibration and current-scene evidence remain scoped to the active site. |
+| `template` (`puda-machine-vision-validation-template`) | Copy-and-customize skill package for another user, environment, camera, or machine. Mirrors the Opentrons skill structure with a `SKILL.md`, annotated example under `assets/`, and machine-identification guidance under `references/`. |
 
-The generic skill supports `bears`, `imre`, `ntu`, and future environments through their corresponding `<environment>-machines` skills. It does not transfer camera geometry, calibration, credentials, workspace polygons, or previous visual confirmations between sites.
+The template supports creation of environment- and machine-specific skills without transferring camera geometry, calibration, credentials, workspace polygons, or previous visual confirmations between sites.
 
-## Reusable template
+## Template skill package
 
-Copy [`puda-machine-vision-validation/templates/machine-deck-vision-validation-template.md`](puda-machine-vision-validation/templates/machine-deck-vision-validation-template.md) to create a validation record for another user, environment, or machine. It follows the Opentrons full-deck presentation approach—outer deck boundary, one labelled box per visible region, occupancy colours, legend, clean evidence, expected-vs-observed comparison, and explicit gate decision—without assuming OT-2 slot geometry.
+Copy the [`template/`](template/) directory to create a vision-validation skill for another user, environment, or machine. Rename the copied directory and frontmatter `name`, replace every `<PLACEHOLDER>`, and install current machine/camera references before using it as a physical gate.
+
+The package follows the `puda-opentrons-vision-validation` layout:
+
+```text
+template/
+├── SKILL.md
+├── assets/
+│   └── machine-deck-region-annotation-example.svg
+└── references/
+    └── machine-workspace-visual-identification.md
+```
 
 ## Install
 

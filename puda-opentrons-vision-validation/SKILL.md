@@ -7,7 +7,7 @@ description: Opentrons OT-2 adapter for the environment-neutral PUDA vision gate
 
 ## Goal
 
-This is the **Opentrons OT-2 adapter** for the environment-neutral `puda-machine-vision-validation` skill. Load the generic gate first, then use this adapter for OT-2-specific deck slots, labware definitions, pipette mounts, trash, and A1–H12 tip/well checks. Camera calibration, slot polygons, endpoints, and current-scene evidence must remain scoped to the active environment (BEARS, IMRE, NTU, or another site).
+This is the **Opentrons OT-2 vision-validation skill** and the repository's reference implementation for [`../template/`](../template/). Use it for OT-2-specific deck slots, labware definitions, pipette mounts, trash, and A1–H12 tip/well checks. Camera calibration, slot polygons, endpoints, and current-scene evidence must remain scoped to the active environment (BEARS, IMRE, NTU, or another site).
 
 Prevent Opentrons OT-2 runs from starting with the wrong physical deck setup. Before a physical Opentrons run in the active PUDA environment, capture a fresh image from that environment's configured camera, verify the slots used by the protocol, identify visible labware/items, and stop for user confirmation when anything is uncertain or mismatched.
 
